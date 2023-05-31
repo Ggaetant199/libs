@@ -76,11 +76,6 @@ class CacheSessionStorage {
       return  false;
     }
 
-    if(this.cache[key]){
-      this.cache[key].data = val;
-      return true;
-    }
-
     if(!(typeof expire == "number" && expire>0)){
       expire = this.defaultExpire;
     }
@@ -267,11 +262,6 @@ class CacheLocalStorage {
   async set(key, val, expire=null){
     if(!this.isOpen){
       return  false;
-    }
-
-    if(this.cache[key]){
-      this.cache[key].data = val;
-      return true;
     }
 
     if(!(typeof expire == "number" && expire>0)){

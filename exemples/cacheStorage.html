@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, resetial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1> cacheStorage</h1>
+  <p>
+    utilsation  les apis  localStorage, sessionStorage  et  indexedDB du  navigateur  pour  créer un system de  cache comme redis côté  navigateur.
+  </p>
+
+  <p>
+    modifier  les valeurs  et  actualiser  le  navigateur, si  les données son persistant  alors sa  marche 
+  </p>
+  <div>
+    <h3>1) CacheSessionStorage</h3>
+    <p>
+      les données sont sauvegardéss le temps d'une session  utilisateur,  la  capacité  de  stckage est limiter à 5Mo
+    </p>
+    <div>
+      <div>
+        caleur  actuel  en  cache:  <b id="c1r"></b>
+      </div>
+      <div  style="display:inline-block;margin-top:10px">
+        nouvelle  valeur  <br>
+        <input type="text" id="c1"  placeholder="entrer une valeur  pour  modifier"><br>
+      </div>
+      <div  style="display:inline-block">
+        durée en  seconds  <br>
+        <input type="number"  min="1" id="c1d" value="60">
+      </div>
+    </div>
+    <div  style="margin-top:20px">
+      <button id="bc1">Modifier</button>
+      <button id="bac1">Actualiser</button>
+    </div>
+  </div>
+
+  <div>
+    <h3>2)  CacheLocalStorage</h3>
+    <p>
+      les données sont sauvegardées par le  navigateur  très  longtemps, la  capacité  de  stckage est limiter à 5Mo
+    </p>
+    <div>
+      <div>
+        caleur  actuel  en  cache:  <b id="c2r"></b>
+      </div>
+      <div  style="display:inline-block;margin-top:10px">
+        nouvelle  valeur  <br>
+        <input type="text" id="c2"  placeholder="entrer une valeur  pour  modifier"><br>
+      </div>
+      <div  style="display:inline-block">
+        durée en  seconds  <br>
+        <input type="number"  min="1" id="c2d" value="60">
+      </div>
+    </div>
+    <div  style="margin-top:20px">
+      <button id="bc2">Modifier</button>
+      <button id="bac2">Actualiser</button>
+    </div>
+  </div>
+
+  <div>
+    <h3>3)  CacheIndexedDB</h3>
+    <p>
+      les données sont sauvegardées par le  navigateur  très  longtemps, la  capacité  de  stckage est limiter peut  atteindre les GO
+    </p>
+    <div>
+      <div>
+        caleur  actuel  en  cache:  <b id="c3r"></b>
+      </div>
+      <div  style="display:inline-block;margin-top:10px">
+        nouvelle  valeur  <br>
+        <input type="text" id="c3"  placeholder="entrer une valeur  pour  modifier"><br>
+      </div>
+      <div  style="display:inline-block">
+        durée en  seconds  <br>
+        <input type="number"  min="1" id="c3d" value="60">
+      </div>
+    </div>
+    <div  style="margin-top:20px">
+      <button id="bc3">Modifier</button>
+      <button id="bac3">Actualiser</button>
+    </div>
+  </div>
+
+  <div>
+    <h3>4)  proxyCache</h3>
+    <p>
+      une fonction  qui permet  de  recuperer le  resultat  d'une fonction  calback en  cache si  elle  existe  sinon execute  le  callback et met a jour  le  cache  avec  le  resulat du  callback pour  la  prochaine fois. 
+    </p>
+    <p>
+      regarder  dans  la  console.
+    </p>
+  </div>
+
+  <script type="module">  
+    import CacheStorage from  "../javascript/CacheStorage.js";
+    import proxyCache from  "../javascript/proxyCache.js";
+
+
+    const cache1  = new CacheStorage("sessionStorage",{name:"session",version:1,maxItems:1,defaultExpire:60,expireCacheDB:60*60*24});
+    const cache2  = new CacheStorage("localStorage",{name:"local",version:1,maxItems:1,defaultExpire:60*60*24,expireCacheDB:60*60*24*7});
+    const cache3  = new CacheStorage("indexedDB",{name:"indexedDB",version:1,maxItems:1,defaultExpire:60*60*24,expireCacheDB:60*60*24*7});
+
+    const bc1  = document.getElementById("bc1");
+    const bac1  = document.getElementById("bac1");
+    const bc2  = document.getElementById("bc2");
+    const bac2  = document.getElementById("bac2");
+    const bc3  = document.getElementById("bc3");
+    const bac3  = document.getElementById("bac3");
+
+    const c1r  = document.getElementById("c1r");
+    const c2r  = document.getElementById("c2r");
+    const c3r  = document.getElementById("c3r");
+    
+    const print={
+      async c1(){
+        const result = await cache1.get("c1");
+        
+        c1r.innerHTML=result;
+      },
+  
+      async c2(){
+        const result = await cache2.get("c2");
+        
+        c2r.innerHTML=result;
+      },
+  
+      async c3(){
+        const result = await cache3.get("c3");
+        
+        c3r.innerHTML=result;
+      }
+    };
+    
+
+    const save={
+      async c1(){
+        const val  = document.getElementById("c1").value;
+        const duree  = document.getElementById("c1d").value;
+  
+        await cache1.set("c1", val, parseInt(duree));
+        await print.c1();
+      },
+  
+      async c2(){
+        const val  = document.getElementById("c2").value;
+        const duree  = document.getElementById("c2d").value;
+  alert(duree)
+        await cache2.set("c2", val, parseInt(duree));
+        await print.c2();
+      },
+  
+      async c3(){
+        const val  = document.getElementById("c3").value;
+        const duree  = document.getElementById("c3d").value;
+  
+        await cache3.set("c3", val, parseInt(duree));
+        await print.c3();
+      }  
+    };
+    
+
+    bc1.addEventListener("click", save.c1);
+    bc2.addEventListener("click", save.c2);
+    bc3.addEventListener("click", save.c3);
+
+    bac1.addEventListener("click", print.c1);
+    bac2.addEventListener("click", print.c2);
+    bac3.addEventListener("click", print.c3);
+
+    print.c1();
+    print.c2();
+    print.c3();
+
+    console.log("proxy  cache");
+
+    async function  proxy (){
+      const result  = await proxyCache({provider:"cache1",key:"p",expire:20},()=>{
+        console.log("cache  reset  indexedDB");
+        return  {p:"indexedDB",a:1,b:"hello",c:[1,"hello"]};
+      });
+
+      console.log(result);
+
+      const result2  = await proxyCache({provider:"cache2",key:"p",expire:10},()=>{
+        console.log("cache  reset  localStorage");
+        return  {p:"localStorage",a:1,b:"hello",c:[1,"hello"]};
+      });
+
+      console.log(result2);
+
+      const result3  = await proxyCache({provider:"cache3",key:"p",expire:5},()=>{
+        console.log("cache  reset  sessionStorage");
+        return  {p:"sessionStorage",a:1,b:"hello",c:[1,"hello"]};
+      });
+
+      console.log(result3);
+    }
+
+    setInterval(proxy,5000);
+  </script>
+</body>
+</html>

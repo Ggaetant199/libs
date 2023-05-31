@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div>
+    <h3>position géographique:</h3>
+    latitute:<span id="geoPosLat"></span> <br>
+    longitude:<span id="geoPosLong"></span> 
+    <div  style="margin-top: 20px;">
+      <button id="resetPos">actualiser  ma  position</button>
+    </div>
+  </div>
+
+  <div>
+    <h3>distance  entre deux  points geographique</h3>
+    <div>
+      <b>pointA: </b>
+      <div>
+        latitute  : <input type="number" name="lat1" id="lat1"  value="48.8567"><br>
+        longitute  : <input type="number" name="long1" id="long1" value="2.3508">
+      </div>
+    </div>
+    <div  style="margin-top: 20px;">
+      <b>pointB: </b>
+      <div>
+        latitute  : <input type="number" name="lat2" id="lat2"  value="51.5072"><br>
+        longitute  : <input type="number" name="long2" id="long2" value="-0.1276">
+      </div>
+    </div>
+    <div  style="margin-top: 20px;">
+      <button id="calc">calculer</button>
+    </div>
+    <div  style="margin-top: 20px;">
+      <u><b id="result"></b></u>
+    </div>
+  </div>
+  <script type="module">
+    import  getGeolocation from  "../javascript/getGeolocation.js";
+    import  getGeoDistance from  "../javascript/getGeoDistance.js";
+
+    const resetPos  = document.getElementById("resetPos");
+    const geoPosLat  = document.getElementById("calc");
+    const geoPosLong  = document.getElementById("calc");
+
+    const calc  = document.getElementById("calc");
+    const resultCacl  = document.getElementById("result");
+
+    resetPos.addEventListener("click",  async ()=>{
+      const result  = await getGeolocation();
+
+      if(result){
+        if(result?.success==true){
+          geoPosLat.innerText=result.coords.lat;
+          geoPosLong.innerText=result.coords.long;
+        } else  {
+          alert("un problème  est survenu vérifier  si  vous  avez  activer la  geolocation ou  accepter  d'autoriser la  géolocalisation pour  se  site!")
+        }
+      }else{
+        alert("votre  navigateur  na  pas d'API de  géolocation");
+      }
+    });
+
+    calc.addEventListener("click",()=>{
+      const lat1  = document.getElementById("lat1").value;
+      const long1  = document.getElementById("long1").value;
+      const lat2  = document.getElementById("lat2").value;
+      const long2  = document.getElementById("long2").value;
+
+      const result  = Math.round(getGeoDistance([lat1,long1],[lat2,long2]));
+      resultCacl.innerText="resultat: ~"+result+" KM";
+    });
+  </script>
+</body>
+</html>
