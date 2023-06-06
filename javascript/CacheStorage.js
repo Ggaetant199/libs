@@ -693,13 +693,13 @@ class CacheIndexedDB{
 function  cacheStorage(provider, options){
   switch (provider) {
     case "indexedDB":
-      return  new  CacheIndexedDB((options.indexedDBOptions)?options.indexedDBOptions:options);
+      return  new  CacheIndexedDB((options?.indexedDBOptions)?options.indexedDBOptions:options);
     case "localStorage":
-      return  new  CacheLocalStorage((options.indexedDBOptions)?options.localStorageOptions:options);
+      return  new  CacheLocalStorage((options?.localStorageOptions)?options.localStorageOptions:options);
     case "sessionStorage":
-      return new  CacheSessionStorage((options.sessionStorageOptions)?options.sesssionStorageOptions:options);
+      return new  CacheSessionStorage((options?.sessionStorageOptions)?options.sesssionStorageOptions:options);
     default :
-    return new  CacheSessionStorage((options.sessionStorageOptions)?options.sesssionStorageOptions:options);
+    return new  CacheSessionStorage((options?.sessionStorageOptions)?options.sesssionStorageOptions:options);
   }
 }
 

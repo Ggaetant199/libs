@@ -4,12 +4,6 @@ class LocalCacheMemory{
   constructor(options) {
     this.options=options;
 
-    this.items={};
-    this.countItems=0;
-    this.ksize=0;
-    this.vsize=0;
-    this.lockWrite={}
-    
     this.intervalId;
 
     this._init();
